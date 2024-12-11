@@ -1,0 +1,20 @@
+export class HttpRequestError extends Error {
+	public code: number;
+	public response: Response;
+	public request: Request;
+
+	constructor(response: Response, request: Request) {
+		const code =
+			response.status || response.status === 0 ? response.status : '';
+		const title = response.statusText || '';
+		const status = `${code} ${title}`.trim();
+		const reason = status ? `status code ${status}` : 'an unknown error';
+
+		super(`request failed with ${reason}: ${request.method} ${request.url}`);
+
+		this.name = 'HttpRequestError';
+		this.code = response.status;
+		this.response = response;
+		this.request = request;
+	}
+}
