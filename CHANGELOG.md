@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.0.3
+
+### Patch Changes
+
+- [`5b6c796`](https://github.com/brainylab/fwrp/commit/5b6c7968c9c5f0a502ba39a1dd10fa3344b94ff1) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - clean package
+
 ## 1.0.2
 
 ### Patch Changes
