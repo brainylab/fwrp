@@ -23,6 +23,10 @@ export const createInstance = (
 ): FwrpInstance => {
 	const fwrp = {} as FwrpInstance;
 
+	if (prefixUrl?.replace(/^https?:\/\//, '').includes('/')) {
+		throw new Error('url invalid, not use / on prefixUrl');
+	}
+
 	for (const method of methods) {
 		fwrp[method as keyof FwrpInstance] = (
 			url: string,
@@ -30,12 +34,13 @@ export const createInstance = (
 		) => {
 			const urlNormalized = new URL(createPath(url), prefixUrl);
 
+			const newConfig: FwrpConfigs = configs || {};
+
+			newConfig.method = method.toUpperCase();
+
 			return Fwrp.create(
 				urlNormalized.toString(),
-				mergeConfigs(
-					{ ...configs, method: method.toUpperCase() },
-					defaultConfigs,
-				),
+				mergeConfigs(newConfig, defaultConfigs),
 			);
 		};
 	}

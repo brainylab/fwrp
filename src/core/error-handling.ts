@@ -13,7 +13,7 @@ export type ErrorHandlingResponse = {
 	throw?: unknown;
 };
 
-export function fwprErrorHandling(error: unknown): ErrorHandlingResponse {
+export function fwrpErrorHandling(error: unknown): ErrorHandlingResponse {
 	if (error instanceof HttpRequestError) {
 		return {
 			code: error.code,

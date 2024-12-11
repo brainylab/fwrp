@@ -1,6 +1,6 @@
 import { createInstance, type FwrpInstance } from './core/create-instance';
 import {
-	fwprErrorHandling,
+	fwrpErrorHandling,
 	type ErrorHandlingResponse,
 } from './core/error-handling';
 
@@ -12,7 +12,7 @@ const fwrp = createInstance() as FwrpInstance & {
 };
 
 fwrp.create = createInstance;
-fwrp.errorHandling = fwprErrorHandling;
+fwrp.errorHandling = fwrpErrorHandling;
 
 /**
  * export lib

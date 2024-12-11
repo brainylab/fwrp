@@ -15,8 +15,12 @@ export type FwrpHooks = {
 	beforeError?: (response: Response) => Promise<void>;
 };
 
+export type FwrpHeadersInit =
+	| NonNullable<RequestInit['headers']>
+	| Record<string, string | undefined>;
+
 export type FwrpConfigs = RequestInit & {
 	params?: ObjectToUrl;
-	headers?: HeadersInit & { Authorization?: string };
+	headers?: FwrpHeadersInit & { Authorization?: string };
 	hooks?: FwrpHooks;
 };

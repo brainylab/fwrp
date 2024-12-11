@@ -4,7 +4,8 @@
 		"devDependencies",
 		"scripts",
 		"config",
-		"packageManager"
+		"packageManager",
+		"clean-package"
 	],
 	"replace": {
 		"main": "dist/index.js",
