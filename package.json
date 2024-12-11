@@ -33,6 +33,8 @@
 		"commit:push": "git push",
 		"format:check": "prettier --check ./src --cache",
 		"lint": "eslint ./src/*.ts",
+		"prepack": "clean-package",
+		"postpack": "clean-package restore",
 		"release": "changeset publish",
 		"test": "vitest run",
 		"test:coverage": "vitest run --coverage && open ./coverage/index.html",
