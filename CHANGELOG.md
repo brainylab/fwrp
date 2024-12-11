@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.0.4
+
+### Patch Changes
+
+- [`537d8f9`](https://github.com/brainylab/fwrp/commit/537d8f9884eba554d8225033a80b9b43b6a0110b) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - adicionado validação de path no prefixUrl
+
 ## 1.0.3
 
 ### Patch Changes
