@@ -20,6 +20,10 @@
 	"main": "./index.js",
 	"module": "./index.mjs",
 	"types": "./index.d.ts",
+	"files": [
+		"dist",
+		"LICENSE"
+	],
 	"scripts": {
 		"build": "tsup ./src/index.ts --dts --format esm,cjs --env.NODE_ENV production",
 		"changeset": "changeset",

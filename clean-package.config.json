@@ -1,5 +1,5 @@
 {
-	"remove": ["devDependencies"],
+	"remove": ["dependencies", "devDependencies"],
 	"replace": {
 		"exports": "./dist/index.js",
 		"main": "./dist/index.js",
