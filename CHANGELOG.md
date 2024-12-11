@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.0.2
+
+### Patch Changes
+
+- [`03c31ee`](https://github.com/brainylab/fwrp/commit/03c31eecb8c5b3451b690ae01179972313fa95e0) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - ajustes nos arquivos instalados
+
 ## 1.0.1
 
 ### Patch Changes
