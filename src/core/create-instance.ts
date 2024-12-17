@@ -38,18 +38,34 @@ export const createInstance = (
 	for (const method of methods) {
 		fwrp[method as keyof FwrpInstance] = (
 			url: string,
-			...args: [InitConfigs | unknown, InitConfigs?]
+			bodyOrConfigs?: InitConfigs | unknown,
+			configs?: InitConfigs,
 		) => {
+			const withBody = ['post', 'put'].includes(method);
+
 			const urlNormalized = new URL(createPath(url), prefixUrl);
 
-			const configs = args[1] ? (args[1] as InitConfigs) : args[0];
+			/**
+			 * create instance without body
+			 */
+			if (!withBody) {
+				const newConfig: FwrpConfigs = bodyOrConfigs || {};
+				newConfig.method = method.toUpperCase();
+
+				return Fwrp.create(
+					urlNormalized.toString(),
+					mergeConfigs(newConfig, defaultConfigs),
+				);
+			}
 
 			const newConfig: FwrpConfigs = configs || {};
-
 			newConfig.method = method.toUpperCase();
 
-			if (args[1]) {
-				newConfig.body = JSON.stringify(args[0]);
+			if (bodyOrConfigs) {
+				newConfig.body = JSON.stringify(bodyOrConfigs);
+				newConfig.headers = {
+					'Content-Type': 'application/json',
+				};
 			}
 
 			return Fwrp.create(
