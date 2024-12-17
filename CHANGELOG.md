@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.0.5
+
+### Patch Changes
+
+- [`14d2249`](https://github.com/brainylab/fwrp/commit/14d224922ccb1a5c844ba3022d3079925919bea8) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - adicionado suporte a conversão do body automaticamente como segundo argumento na função
+
 ## 1.0.4
 
 ### Patch Changes
