@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.0.6
+
+### Patch Changes
+
+- [`110969e`](https://github.com/brainylab/fwrp/commit/110969ee6fd4b247b6d98c4c122c78937e51b444) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - fix types
+
 ## 1.0.5
 
 ### Patch Changes
