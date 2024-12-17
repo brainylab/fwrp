@@ -1,6 +1,4 @@
 {
-  "cSpell.words": [
-    "fwpr",
-    "fwrp"
-  ]
+	"cSpell.words": ["fwpr", "fwrp"],
+	"typescript.tsdk": "node_modules/typescript/lib"
 }
