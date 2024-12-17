@@ -10,12 +10,12 @@ export type InitConfigs = Omit<FwrpConfigs, 'method'>;
 
 export type FwrpInstance = {
 	get: <T>(url: string, configs?: InitConfigs) => FwprPromiseResponse<T>;
-	post: <T, B>(
+	post: <B = unknown, T = unknown>(
 		url: string,
 		body?: B,
 		configs?: InitConfigs,
 	) => FwprPromiseResponse<T>;
-	put: <T, B>(
+	put: <B = unknown, T = unknown>(
 		url: string,
 		body?: B,
 		configs?: InitConfigs,
