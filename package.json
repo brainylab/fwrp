@@ -67,8 +67,5 @@
 	"engines": {
 		"node": ">= 18"
 	},
-	"clean-package": "./clean-package.config.json",
-	"dependencies": {
-		"ky": "1.7.3"
-	}
+	"clean-package": "./clean-package.config.json"
 }
