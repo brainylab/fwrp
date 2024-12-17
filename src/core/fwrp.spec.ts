@@ -1,6 +1,6 @@
 import { HttpRequestError } from '../errors/http-request-error';
 
-import { fwprErrorHandling } from './error-handling';
+import { fwrpErrorHandling } from './error-handling';
 import { Fwrp } from './fwrp';
 
 describe('fetch-wrapper', () => {
@@ -76,7 +76,7 @@ describe('fetch-wrapper', () => {
 
 			await response.json();
 		} catch (err) {
-			const { error } = await fwprErrorHandling(err);
+			const { error } = fwrpErrorHandling(err);
 
 			expect(error).toBe('CONNECTION_REFUSED');
 		}
