@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.0.7
+
+### Patch Changes
+
+- [`195b10b`](https://github.com/brainylab/fwrp/commit/195b10b039de425c79ec8e108f2884469df8d5d3) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - fix post,put send body json
+
 ## 1.0.6
 
 ### Patch Changes
