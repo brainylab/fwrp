@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.0.10
+
+### Patch Changes
+
+- [`077ebab`](https://github.com/brainylab/fwrp/commit/077ebab99d9f15f3e0e886eaa521513832afb973) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - create types from error handler return json
+
 ## 1.0.9
 
 ### Patch Changes
