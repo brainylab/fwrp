@@ -7,8 +7,8 @@ type FetchTypeError = TypeError & {
 export type ErrorHandlingResponse = {
 	code?: number;
 	message: string;
-	json?: <D>() => Promise<D>;
-	text?: () => Promise<string>;
+	json: <D>() => Promise<D>;
+	text: () => Promise<string>;
 	error: 'HTTP_REQUEST_ERROR' | 'CONNECTION_REFUSED' | 'UNEXPECTED_ERROR';
 	throw?: unknown;
 };
@@ -31,6 +31,8 @@ export function fwrpErrorHandling(error: unknown): ErrorHandlingResponse {
 			return {
 				message: `connection refused ${err.cause.address} on port ${err.cause.port}`,
 				error: 'CONNECTION_REFUSED',
+				json: async () => ({}) as never,
+				text: async () => '',
 			};
 		}
 	}
@@ -38,6 +40,8 @@ export function fwrpErrorHandling(error: unknown): ErrorHandlingResponse {
 	return {
 		message: 'an unexpected error occurred',
 		error: 'UNEXPECTED_ERROR',
+		json: async () => ({}) as never,
+		text: async () => '',
 		throw: error,
 	};
 }
