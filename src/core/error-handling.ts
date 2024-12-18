@@ -1,10 +1,10 @@
 import { HttpRequestError } from 'src/errors/http-request-error';
 
+import type { JsonErrorHandling } from 'src/types';
+
 type FetchTypeError = TypeError & {
 	cause?: { code: 'ECONNREFUSED'; address: string; port: number };
 };
-
-type JsonErrorHandling = unknown;
 
 export type ErrorHandlingResponse<T> = {
 	code?: number;
