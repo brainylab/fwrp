@@ -8,7 +8,7 @@ import type { InitConfigs } from './core/create-instance';
 
 const fwrp = createInstance() as FwrpInstance & {
 	create: (url?: string, configs?: InitConfigs) => FwrpInstance;
-	errorHandling: (error: unknown) => ErrorHandlingResponse;
+	errorHandling: (error: unknown) => ErrorHandlingResponse<unknown>;
 };
 
 fwrp.create = createInstance;
