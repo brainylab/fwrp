@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.0.9
+
+### Patch Changes
+
+- [`246b220`](https://github.com/brainylab/fwrp/commit/246b2208d74625e7718b4409f7991ced952154b9) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - corrigido error handling que retornava uma promise json ou text sem o bind da intancia HTTPError
+
 ## 1.0.8
 
 ### Patch Changes
