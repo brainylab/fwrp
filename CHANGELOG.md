@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.0.8
+
+### Patch Changes
+
+- [`e12abf6`](https://github.com/brainylab/fwrp/commit/e12abf61258153224b1e2869fd8e7c2194eb7245) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - correção ao retornar json e text no error handling
+
 ## 1.0.7
 
 ### Patch Changes
