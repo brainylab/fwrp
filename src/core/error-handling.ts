@@ -4,21 +4,25 @@ type FetchTypeError = TypeError & {
 	cause?: { code: 'ECONNREFUSED'; address: string; port: number };
 };
 
-export type ErrorHandlingResponse = {
+type JsonErrorHandling = unknown;
+
+export type ErrorHandlingResponse<T> = {
 	code?: number;
 	message: string;
 	error: 'HTTP_REQUEST_ERROR' | 'CONNECTION_REFUSED' | 'UNEXPECTED_ERROR';
-	json: () => Promise<unknown>;
+	json: () => Promise<T>;
 	text: () => Promise<string>;
 	throw?: unknown;
 };
 
-export function fwrpErrorHandling(error: unknown): ErrorHandlingResponse {
+export function fwrpErrorHandling<T = JsonErrorHandling>(
+	error: unknown,
+): ErrorHandlingResponse<T> {
 	if (error instanceof HttpRequestError) {
 		return {
 			code: error.code,
 			message: error.message,
-			json: error.json,
+			json: error.json as () => Promise<T>,
 			text: error.text,
 			error: 'HTTP_REQUEST_ERROR',
 		};
@@ -30,7 +34,7 @@ export function fwrpErrorHandling(error: unknown): ErrorHandlingResponse {
 		if (err?.cause && err?.cause.code === 'ECONNREFUSED') {
 			return {
 				message: `connection refused ${err.cause.address} on port ${err.cause.port}`,
-				json: async () => ({}),
+				json: async () => ({}) as unknown as T,
 				text: async () => '',
 				error: 'CONNECTION_REFUSED',
 			};
@@ -40,7 +44,7 @@ export function fwrpErrorHandling(error: unknown): ErrorHandlingResponse {
 	return {
 		message: 'an unexpected error occurred',
 		error: 'UNEXPECTED_ERROR',
-		json: async () => ({}),
+		json: async () => ({}) as unknown as T,
 		text: async () => '',
 		throw: error,
 	};
