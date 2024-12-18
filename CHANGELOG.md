@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.0.11
+
+### Patch Changes
+
+- [`e9285e7`](https://github.com/brainylab/fwrp/commit/e9285e7668c2ff3e2ab3ef565dc5b5f266ff17aa) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - fix types and extends on declare module
+
 ## 1.0.10
 
 ### Patch Changes
