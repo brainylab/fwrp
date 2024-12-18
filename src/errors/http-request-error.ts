@@ -2,6 +2,8 @@ export class HttpRequestError extends Error {
 	public code: number;
 	public response: Response;
 	public request: Request;
+	public json: () => Promise<unknown>;
+	public text: () => Promise<string>;
 
 	constructor(response: Response, request: Request) {
 		const code =
@@ -14,6 +16,10 @@ export class HttpRequestError extends Error {
 
 		this.name = 'HttpRequestError';
 		this.code = response.status;
+
+		this.json = response.json.bind(response);
+		this.text = response.json.bind(response);
+
 		this.response = response;
 		this.request = request;
 	}
