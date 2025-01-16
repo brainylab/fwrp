@@ -40,14 +40,9 @@ export const createInstance = (
 		) => {
 			const withBody = ['post', 'put'].includes(method);
 
-			console.log('aqui', prefixUrl);
-			console.log('aqui', url);
-
 			const urlNormalized = prefixUrl
 				? createUrl(prefixUrl, url)
 				: createUrl(url);
-
-			console.log(urlNormalized);
 
 			/**
 			 * create instance without body
