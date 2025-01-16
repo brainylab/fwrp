@@ -1,4 +1,5 @@
-import { createPath } from '../utils/create-path';
+import { createUrl } from 'src/utils/create-url';
+
 import { mergeConfigs } from '../utils/merge-configs';
 
 import { Fwrp } from './fwrp';
@@ -31,10 +32,6 @@ export const createInstance = (
 ): FwrpInstance => {
 	const fwrp = {} as FwrpInstance;
 
-	if (prefixUrl?.replace(/^https?:\/\//, '').includes('/')) {
-		throw new Error('url invalid, not use / on prefixUrl');
-	}
-
 	for (const method of methods) {
 		fwrp[method as keyof FwrpInstance] = (
 			url: string,
@@ -43,7 +40,14 @@ export const createInstance = (
 		) => {
 			const withBody = ['post', 'put'].includes(method);
 
-			const urlNormalized = new URL(createPath(url), prefixUrl);
+			console.log('aqui', prefixUrl);
+			console.log('aqui', url);
+
+			const urlNormalized = prefixUrl
+				? createUrl(prefixUrl, url)
+				: createUrl(url);
+
+			console.log(urlNormalized);
 
 			/**
 			 * create instance without body

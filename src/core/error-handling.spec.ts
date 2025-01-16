@@ -2,15 +2,16 @@ import { HttpRequestError } from 'src/errors/http-request-error';
 
 import { fwrp } from '../index';
 
-import { fwprErrorHandling } from './error-handling';
+import { fwrpErrorHandling } from './error-handling';
 
 describe('error-handling', () => {
 	it('should handle HttpRequestError', async () => {
-		const error = fwprErrorHandling(
+		const error = fwrpErrorHandling(
 			new HttpRequestError(
 				{
 					status: 404,
 					statusText: 'Not Found',
+					json: () => Promise.resolve({ message: 'Not Found' }),
 				} as Response,
 				{} as Request,
 			),
@@ -24,7 +25,7 @@ describe('error-handling', () => {
 		try {
 			await fwrp.get('http://localhost');
 		} catch (error) {
-			const result = fwprErrorHandling(error);
+			const result = fwrpErrorHandling(error);
 
 			expect(result).toHaveProperty('error');
 			expect(result.error).toEqual('CONNECTION_REFUSED');
@@ -33,7 +34,7 @@ describe('error-handling', () => {
 
 	it('should handle unknown error', () => {
 		const error = { code: 'UNKNOWN_ERROR' };
-		const result = fwprErrorHandling(error);
+		const result = fwrpErrorHandling(error);
 
 		expect(result).toHaveProperty('error');
 		expect(result.error).toEqual('UNEXPECTED_ERROR');
