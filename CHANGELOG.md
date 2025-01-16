@@ -1,5 +1,15 @@
 # @brainylab/fwrp
 
+## 1.1.0
+
+### Minor Changes
+
+- [`5f72436`](https://github.com/brainylab/fwrp/commit/5f724369aeaf5ce3765548ab2b5f3aa7feafe117) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - refactor: refatorado criador de URL, e adicionado novos sistema para validar URL e o patch
+
+### Patch Changes
+
+- [`d113ecd`](https://github.com/brainylab/fwrp/commit/d113ecdaf61f62b28610f65d9ce17b44fdf9e5ff) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - remove console.logs
+
 ## 1.0.11
 
 ### Patch Changes
