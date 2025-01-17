@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.2.0
+
+### Minor Changes
+
+- [`1e60985`](https://github.com/brainylab/fwrp/commit/1e60985d925e4e07a2173bb68b327eef7b989184) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - criado novo algoritmo para lidar com a criacão e gerenciamento de URL
+
 ## 1.1.0
 
 ### Minor Changes
