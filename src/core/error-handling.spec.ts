@@ -1,5 +1,4 @@
-import { HttpRequestError } from 'src/errors/http-request-error';
-
+import { HttpRequestError } from '../errors/http-request-error';
 import { fwrp } from '../index';
 
 import { fwrpErrorHandling } from './error-handling';

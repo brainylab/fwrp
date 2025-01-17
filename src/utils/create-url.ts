@@ -1,35 +1,74 @@
 import { isValidPath } from './is-valid-path';
 import { isValidPrefix } from './is-valid-prefix';
 import { isValidUrl } from './is-valid-url';
+import { objectToUrlParams, type ObjectToUrl } from './object-to-url-params';
 
-export function createUrl(url: string, path?: string) {
-	if (url.endsWith('/')) {
-		url = url.slice(0, -1);
+export class CreateURL {
+	private url: string;
+	private params?: ObjectToUrl;
+
+	constructor() {
+		this.url = '';
 	}
 
-	if (!path) {
-		if (!isValidUrl(url)) {
-			throw new Error('URL is invalid!');
+	private createUrl(url: string, path?: string) {
+		if (url.endsWith('/')) {
+			url = url.slice(0, -1);
 		}
 
-		return url;
+		if (!path) {
+			if (!isValidUrl(url)) {
+				throw new Error('URL is invalid!');
+			}
+
+			this.url = url;
+
+			return;
+		}
+
+		if (!isValidPrefix(url)) {
+			throw new Error('prefix URL is invalid!');
+		}
+
+		if (!isValidPath(path)) {
+			throw new Error('path is invalid!');
+		}
+
+		if (path.length > 0 && !path.startsWith('/')) {
+			path = '/' + path;
+		}
+
+		if (path === '/' || path.trim() === '') {
+			path = '';
+		}
+
+		this.url = url.concat(path);
+		return;
 	}
 
-	if (!isValidPrefix(url)) {
-		throw new Error('prefix URL is invalid!');
+	public addParams(params: ObjectToUrl) {
+		this.params = params;
 	}
 
-	if (!isValidPath(path)) {
-		throw new Error('path is invalid!');
+	public getParams() {
+		return this.params;
 	}
 
-	if (path.length > 0 && !path.startsWith('/')) {
-		path = '/' + path;
+	public toString() {
+		if (this.params) {
+			const params = objectToUrlParams(this.params);
+
+			this.url = `${this.url}?${params}`;
+		}
+
+		return this.url;
 	}
 
-	if (path === '/' || path.trim() === '') {
-		path = '';
-	}
+	static create(url: string, path?: string) {
+		const instance = new CreateURL();
 
-	return url.concat(path);
+		instance.createUrl(url, path);
+
+		return instance;
+	}
 }

@@ -1,5 +1,4 @@
-import { createUrl } from 'src/utils/create-url';
-
+import { CreateURL } from '../utils/create-url';
 import { mergeConfigs } from '../utils/merge-configs';
 
 import { Fwrp } from './fwrp';
@@ -40,9 +39,9 @@ export const createInstance = (
 		) => {
 			const withBody = ['post', 'put'].includes(method);
 
-			const urlNormalized = prefixUrl
-				? createUrl(prefixUrl, url)
-				: createUrl(url);
+			const urlInstance = prefixUrl
+				? CreateURL.create(prefixUrl, url)
+				: CreateURL.create(url);
 
 			/**
 			 * create instance without body
@@ -52,7 +51,7 @@ export const createInstance = (
 				newConfig.method = method.toUpperCase();
 
 				return Fwrp.create(
-					urlNormalized.toString(),
+					urlInstance,
 					mergeConfigs(newConfig, defaultConfigs),
 				);
 			}
@@ -67,10 +66,7 @@ export const createInstance = (
 				};
 			}
 
-			return Fwrp.create(
-				urlNormalized.toString(),
-				mergeConfigs(newConfig, defaultConfigs),
-			);
+			return Fwrp.create(urlInstance, mergeConfigs(newConfig, defaultConfigs));
 		};
 	}
 

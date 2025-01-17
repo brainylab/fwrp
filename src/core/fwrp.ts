@@ -1,8 +1,8 @@
-import { objectToUrlParams } from '../utils/object-to-url-params';
 import { HttpRequestError } from '../errors/http-request-error';
 
 import { responseTypes } from './constants';
 
+import type { CreateURL } from 'src/utils/create-url';
 import type {
 	FwprPromiseResponse,
 	FwrpConfigs,
@@ -53,17 +53,9 @@ export class Fwrp {
 		return fetch;
 	}
 
-	static create(input: string, configs: FwrpConfigs) {
-		const url = new URL(input);
-
+	static create(url: CreateURL, configs: FwrpConfigs) {
 		if (configs?.params) {
-			const params = objectToUrlParams(configs.params);
-			url.search = params;
-		}
-
-		if (configs?.params) {
-			const params = objectToUrlParams(configs.params);
-			url.search = params;
+			url.addParams(configs.params);
 		}
 
 		const fwrp = new Fwrp(url.toString(), configs);
