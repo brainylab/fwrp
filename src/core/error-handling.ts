@@ -10,7 +10,7 @@ export type ErrorHandlingResponse<T> = {
 	code?: number;
 	message: string;
 	error: 'HTTP_REQUEST_ERROR' | 'CONNECTION_REFUSED' | 'UNEXPECTED_ERROR';
-	json: () => Promise<T>;
+	json: <D = T>() => Promise<D>;
 	text: () => Promise<string>;
 	throw?: unknown;
 };
@@ -22,7 +22,7 @@ export function fwrpErrorHandling<T = JsonErrorHandling>(
 		return {
 			code: error.code,
 			message: error.message,
-			json: error.json as () => Promise<T>,
+			json: error.json as <D = T>() => Promise<D>,
 			text: error.text,
 			error: 'HTTP_REQUEST_ERROR',
 		};
@@ -34,7 +34,7 @@ export function fwrpErrorHandling<T = JsonErrorHandling>(
 		if (err?.cause && err?.cause.code === 'ECONNREFUSED') {
 			return {
 				message: `connection refused ${err.cause.address} on port ${err.cause.port}`,
-				json: async () => ({}) as unknown as T,
+				json: async <D = T>() => ({}) as unknown as D,
 				text: async () => '',
 				error: 'CONNECTION_REFUSED',
 			};
@@ -44,7 +44,7 @@ export function fwrpErrorHandling<T = JsonErrorHandling>(
 	return {
 		message: 'an unexpected error occurred',
 		error: 'UNEXPECTED_ERROR',
-		json: async () => ({}) as unknown as T,
+		json: async <D = T>() => ({}) as unknown as D,
 		text: async () => '',
 		throw: error,
 	};
