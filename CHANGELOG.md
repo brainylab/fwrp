@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.2.1
+
+### Patch Changes
+
+- [`5a12fb7`](https://github.com/brainylab/fwrp/commit/5a12fb756192a7c29647d787a2706c28a94a6bf1) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - error handling type fix
+
 ## 1.2.0
 
 ### Minor Changes
