@@ -12,7 +12,7 @@ export type FwprPromiseResponse<T = unknown> = {
 
 export type FwrpHooks = {
 	beforeRequest?: (request: Request) => Promise<void>;
-	beforeError?: (response: Response) => Promise<void>;
+	beforeError?: (response: FwrpResponse) => Promise<void>;
 };
 
 export type FwrpHeadersInit =
