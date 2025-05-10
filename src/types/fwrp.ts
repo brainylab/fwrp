@@ -11,7 +11,7 @@ export type FwprPromiseResponse<T = unknown> = {
 } & Promise<FwrpResponse<T>>;
 
 export type FwrpHooks = {
-	afterRequest?: (request: Request) => Promise<void>;
+	beforeRequest?: (request: Request) => Promise<void>;
 	beforeError?: (response: Response) => Promise<void>;
 };
 
