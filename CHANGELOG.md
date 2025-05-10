@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.3.1
+
+### Patch Changes
+
+- [`d0447d0`](https://github.com/brainylab/fwrp/commit/d0447d04ec6250182c201251447846e58e4c8c93) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - fix types from response error
+
 ## 1.3.0
 
 ### Minor Changes
