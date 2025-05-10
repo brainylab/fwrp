@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.3.0
+
+### Minor Changes
+
+- [`ad85bdd`](https://github.com/brainylab/fwrp/commit/ad85bdd68799be5a6cd17f83b5c2eb409213358c) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - correção dos nomes do hooks, alterado de after para before request
+
 ## 1.2.1
 
 ### Patch Changes
