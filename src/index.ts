@@ -24,6 +24,7 @@ export * from './core/error-handling';
  * export types
  */
 export type { FwrpInstance } from './core/create-instance';
+export type * from './types/fwrp';
 export type * from './types';
 
 export { fwrp, fwrp as default };
