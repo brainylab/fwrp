@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.3.2
+
+### Patch Changes
+
+- [`92b216c`](https://github.com/brainylab/fwrp/commit/92b216c342106bb685bc636ec688d8252b10f64a) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - refactor: ajustar formatação de importações e adicionar exportação de tipos
+
 ## 1.3.1
 
 ### Patch Changes
