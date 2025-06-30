@@ -4,29 +4,25 @@ import { isValidUrl } from './is-valid-url';
 import { objectToUrlParams, type ObjectToUrl } from './object-to-url-params';
 
 export class CreateURL {
-	private url: string;
-	private params?: ObjectToUrl;
+	private readonly url: string;
+	private readonly params?: ObjectToUrl;
 
-	constructor() {
-		this.url = '';
+	private constructor(url: string, params?: ObjectToUrl) {
+		this.url = url;
+		this.params = params;
 	}
 
-	private createUrl(url: string, path?: string) {
-		if (url.endsWith('/')) {
-			url = url.slice(0, -1);
-		}
+	private static buildUrl(url: string, path?: string): string {
+		const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
 
 		if (!path) {
-			if (!isValidUrl(url)) {
+			if (!isValidUrl(cleanUrl)) {
 				throw new Error('URL is invalid!');
 			}
-
-			this.url = url;
-
-			return;
+			return cleanUrl;
 		}
 
-		if (!isValidPrefix(url)) {
+		if (!isValidPrefix(cleanUrl)) {
 			throw new Error('prefix URL is invalid!');
 		}
 
@@ -34,20 +30,19 @@ export class CreateURL {
 			throw new Error('path is invalid!');
 		}
 
-		if (path.length > 0 && !path.startsWith('/')) {
-			path = '/' + path;
+		let cleanPath = path;
+		if (cleanPath.length > 0 && !cleanPath.startsWith('/')) {
+			cleanPath = '/' + cleanPath;
+		}
+		if (cleanPath === '/' || cleanPath.trim() === '') {
+			cleanPath = '';
 		}
 
-		if (path === '/' || path.trim() === '') {
-			path = '';
-		}
-
-		this.url = url.concat(path);
-		return;
+		return cleanUrl.concat(cleanPath);
 	}
 
-	public addParams(params: ObjectToUrl) {
-		this.params = params;
+	public addParams(params: ObjectToUrl): CreateURL {
+		return new CreateURL(this.url, params);
 	}
 
 	public getParams() {
@@ -55,20 +50,18 @@ export class CreateURL {
 	}
 
 	public toString() {
+		const baseUrl = this.url;
+
 		if (this.params) {
 			const params = objectToUrlParams(this.params);
-
-			this.url = `${this.url}?${params}`;
+			return `${baseUrl}?${params}`;
 		}
 
-		return this.url;
+		return baseUrl;
 	}
 
-	static create(url: string, path?: string) {
-		const instance = new CreateURL();
-
-		instance.createUrl(url, path);
-
-		return instance;
+	static create(url: string, path?: string): CreateURL {
+		const builtUrl = CreateURL.buildUrl(url, path);
+		return new CreateURL(builtUrl);
 	}
 }

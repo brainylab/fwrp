@@ -7,4 +7,12 @@ export const responseTypes = {
 	request: '*/*',
 } as const;
 
-export const methods = ['get', 'post', 'put', 'delete', 'patch', 'head'];
+export const methods = [
+	'get',
+	'post',
+	'put',
+	'delete',
+	'patch',
+	'head',
+	'request',
+];

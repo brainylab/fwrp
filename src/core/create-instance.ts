@@ -7,6 +7,10 @@ import { methods } from './constants';
 import type { FwprPromiseResponse, FwrpConfigs } from '../types/fwrp';
 
 export type InitConfigs = Omit<FwrpConfigs, 'method'>;
+export type RequestInitConfigs = InitConfigs & {
+	url: string;
+	method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD';
+};
 
 export type FwrpInstance = {
 	get: <T>(url: string, configs?: InitConfigs) => FwprPromiseResponse<T>;
@@ -23,6 +27,7 @@ export type FwrpInstance = {
 	delete: <T>(url: string, configs?: InitConfigs) => FwprPromiseResponse<T>;
 	patch: <T>(url: string, configs?: InitConfigs) => FwprPromiseResponse<T>;
 	head: <T>(url: string, configs?: InitConfigs) => FwprPromiseResponse<T>;
+	request: <T>(configs: RequestInitConfigs) => FwprPromiseResponse<T>;
 };
 
 export const createInstance = (
@@ -33,22 +38,29 @@ export const createInstance = (
 
 	for (const method of methods) {
 		fwrp[method as keyof FwrpInstance] = (
-			url: string,
+			urlOrConfig: string | RequestInitConfigs,
 			bodyOrConfigs?: InitConfigs | unknown,
 			configs?: InitConfigs,
 		) => {
-			const withBody = ['post', 'put'].includes(method);
+			const requestUrl =
+				typeof urlOrConfig === 'string' ? urlOrConfig : urlOrConfig.url;
+			const requestMethod =
+				typeof urlOrConfig === 'string'
+					? method
+					: urlOrConfig.method.toLowerCase();
+
+			const withBody = ['post', 'put'].includes(requestMethod);
 
 			const urlInstance = prefixUrl
-				? CreateURL.create(prefixUrl, url)
-				: CreateURL.create(url);
+				? CreateURL.create(prefixUrl, requestUrl)
+				: CreateURL.create(requestUrl);
 
 			/**
 			 * create instance without body
 			 */
 			if (!withBody) {
 				const newConfig: FwrpConfigs = bodyOrConfigs || {};
-				newConfig.method = method.toUpperCase();
+				newConfig.method = requestMethod.toUpperCase();
 
 				return Fwrp.create(
 					urlInstance,
@@ -57,7 +69,7 @@ export const createInstance = (
 			}
 
 			const newConfig: FwrpConfigs = configs || {};
-			newConfig.method = method.toUpperCase();
+			newConfig.method = requestMethod.toUpperCase();
 
 			if (bodyOrConfigs) {
 				newConfig.body = JSON.stringify(bodyOrConfigs);
