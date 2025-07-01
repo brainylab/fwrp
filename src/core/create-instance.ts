@@ -6,9 +6,10 @@ import { methods } from './constants';
 
 import type { FwprPromiseResponse, FwrpConfigs } from '../types/fwrp';
 
-export type InitConfigs = Omit<FwrpConfigs, 'method'>;
+export type InitConfigs = Omit<FwrpConfigs, 'method' | 'body'>;
 export type RequestInitConfigs = InitConfigs & {
 	url: string;
+	body?: unknown;
 	method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD';
 };
 
@@ -27,7 +28,7 @@ export type FwrpInstance = {
 	delete: <T>(url: string, configs?: InitConfigs) => FwprPromiseResponse<T>;
 	patch: <T>(url: string, configs?: InitConfigs) => FwprPromiseResponse<T>;
 	head: <T>(url: string, configs?: InitConfigs) => FwprPromiseResponse<T>;
-	request: <T>(configs: RequestInitConfigs) => FwprPromiseResponse<T>;
+	fetch: <T>(configs: RequestInitConfigs) => FwprPromiseResponse<T>;
 };
 
 export const createInstance = (

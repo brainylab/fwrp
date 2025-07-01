@@ -14,5 +14,5 @@ export const methods = [
 	'delete',
 	'patch',
 	'head',
-	'request',
+	'fetch',
 ];
