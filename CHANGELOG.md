@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.4.1
+
+### Patch Changes
+
+- [`a95ccb9`](https://github.com/brainylab/fwrp/commit/a95ccb9e1b17570d55c920cd7263b96739cdfb39) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - refactor: substituir método 'request' por 'fetch' e aprimorar a classe CreateURL
+
 ## 1.4.0
 
 ### Minor Changes
