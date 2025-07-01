@@ -72,8 +72,11 @@ export const createInstance = (
 			const newConfig: FwrpConfigs = configs || {};
 			newConfig.method = requestMethod.toUpperCase();
 
-			if (bodyOrConfigs) {
-				newConfig.body = JSON.stringify(bodyOrConfigs);
+			const bodyObject =
+				typeof urlOrConfig === 'string' ? bodyOrConfigs : urlOrConfig.body;
+
+			if (bodyObject) {
+				newConfig.body = JSON.stringify(bodyObject);
 				newConfig.headers = {
 					'Content-Type': 'application/json',
 				};
