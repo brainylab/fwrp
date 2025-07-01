@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.4.2
+
+### Patch Changes
+
+- [`121fb34`](https://github.com/brainylab/fwrp/commit/121fb3415f7507562c48b70c1d9abad698f47420) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - fix bocy in fetch method
+
 ## 1.4.1
 
 ### Patch Changes
