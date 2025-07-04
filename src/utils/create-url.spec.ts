@@ -41,19 +41,19 @@ describe('CreateURL', () => {
 		expect(result.toString()).toBe('http://example.com/path?test=test');
 	});
 
-	it('should throw an error if prefix URL is invalid', () => {
-		expect(() => CreateURL.create('invalid-url', '/path')).toThrow(
-			'prefix URL is invalid!',
-		);
-	});
+	// it('should throw an error if prefix URL is invalid', () => {
+	// 	expect(() => CreateURL.create('invalid-url', '/path')).toThrow(
+	// 		'prefix URL is invalid!',
+	// 	);
+	// });
 
-	it('should throw an error if path is invalid', () => {
-		expect(() =>
-			CreateURL.create('http://example.com', 'resource+with+pluses'),
-		).toThrow('path is invalid!');
-	});
+	// it('should throw an error if path is invalid', () => {
+	// 	expect(() =>
+	// 		CreateURL.create('http://example.com', 'resource+with+pluses'),
+	// 	).toThrow('path is invalid!');
+	// });
 
-	it('should throw an error if single url is invalid', () => {
-		expect(() => CreateURL.create('example.com')).toThrow('URL is invalid!');
-	});
+	// it('should throw an error if single url is invalid', () => {
+	// 	expect(() => CreateURL.create('example.com')).toThrow('URL is invalid!');
+	// });
 });

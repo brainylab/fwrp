@@ -23,4 +23,5 @@ export type FwrpConfigs = RequestInit & {
 	params?: ObjectToUrl;
 	headers?: FwrpHeadersInit & { Authorization?: string };
 	hooks?: FwrpHooks;
+	throwHttpError?: boolean;
 };

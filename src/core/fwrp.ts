@@ -1,3 +1,4 @@
+import { mergeConfigs } from '../utils/merge-configs';
 import { HttpRequestError } from '../errors/http-request-error';
 
 import { responseTypes } from './constants';
@@ -30,6 +31,7 @@ export class Fwrp {
 	constructor(url: string, configs: FwrpConfigs) {
 		this._configs = {
 			...configs,
+			throwHttpError: configs?.throwHttpError ?? true,
 			fetch: globalThis.fetch.bind(globalThis),
 		} as InternalOptions;
 
@@ -58,10 +60,20 @@ export class Fwrp {
 			url.addParams(configs.params);
 		}
 
+		if (typeof configs.body === 'object') {
+			configs.body = JSON.stringify(configs.body);
+			configs.headers = mergeConfigs(
+				{
+					'Content-Type': 'application/json',
+				},
+				configs.headers,
+			) as Record<string, string>;
+		}
+
 		const fwrp = new Fwrp(url.toString(), configs);
 
 		const handler = async (): Promise<Response> => {
-			await Promise.resolve();
+			// await Promise.resolve();
 			const response = await fwrp._fetch();
 
 			if (!response.ok) {
@@ -69,7 +81,9 @@ export class Fwrp {
 					await configs.hooks.beforeError(response);
 				}
 
-				throw new HttpRequestError(response, fwrp.request);
+				if (fwrp._configs.throwHttpError) {
+					throw new HttpRequestError(response, fwrp.request);
+				}
 			}
 
 			return response;

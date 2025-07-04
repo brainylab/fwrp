@@ -2,7 +2,6 @@ import { CreateURL } from '../utils/create-url';
 import { mergeConfigs } from '../utils/merge-configs';
 
 import { Fwrp } from './fwrp';
-import { methods } from './constants';
 
 import type { FwprPromiseResponse, FwrpConfigs } from '../types/fwrp';
 
@@ -37,54 +36,44 @@ export const createInstance = (
 ): FwrpInstance => {
 	const fwrp = {} as FwrpInstance;
 
-	for (const method of methods) {
-		fwrp[method as keyof FwrpInstance] = (
-			urlOrConfig: string | RequestInitConfigs,
-			bodyOrConfigs?: InitConfigs | unknown,
-			configs?: InitConfigs,
-		) => {
-			const requestUrl =
-				typeof urlOrConfig === 'string' ? urlOrConfig : urlOrConfig.url;
-			const requestMethod =
-				typeof urlOrConfig === 'string'
-					? method
-					: urlOrConfig.method.toLowerCase();
+	fwrp.fetch = (configs: RequestInitConfigs) => {
+		const urlInstance = prefixUrl
+			? CreateURL.create(prefixUrl, configs.url)
+			: CreateURL.create(configs.url);
 
-			const withBody = ['post', 'put'].includes(requestMethod);
+		return Fwrp.create(urlInstance, mergeConfigs(configs, defaultConfigs));
+	};
 
-			const urlInstance = prefixUrl
-				? CreateURL.create(prefixUrl, requestUrl)
-				: CreateURL.create(requestUrl);
+	fwrp.get = <T>(url: string, configs?: InitConfigs): FwprPromiseResponse<T> =>
+		fwrp.fetch({ ...configs, method: 'GET', url });
 
-			/**
-			 * create instance without body
-			 */
-			if (!withBody) {
-				const newConfig: FwrpConfigs = bodyOrConfigs || {};
-				newConfig.method = requestMethod.toUpperCase();
+	fwrp.patch = <T>(
+		url: string,
+		configs?: InitConfigs,
+	): FwprPromiseResponse<T> => fwrp.fetch({ ...configs, method: 'PATCH', url });
 
-				return Fwrp.create(
-					urlInstance,
-					mergeConfigs(newConfig, defaultConfigs),
-				);
-			}
+	fwrp.head = <T>(url: string, configs?: InitConfigs): FwprPromiseResponse<T> =>
+		fwrp.fetch({ ...configs, method: 'HEAD', url });
 
-			const newConfig: FwrpConfigs = configs || {};
-			newConfig.method = requestMethod.toUpperCase();
+	fwrp.post = <B = unknown, T = unknown>(
+		url: string,
+		body?: B,
+		configs?: InitConfigs,
+	): FwprPromiseResponse<T> =>
+		fwrp.fetch({ ...configs, method: 'POST', url, body });
 
-			const bodyObject =
-				typeof urlOrConfig === 'string' ? bodyOrConfigs : urlOrConfig.body;
+	fwrp.put = <B = unknown, T = unknown>(
+		url: string,
+		body?: B,
+		configs?: InitConfigs,
+	): FwprPromiseResponse<T> =>
+		fwrp.fetch({ ...configs, method: 'PUT', url, body });
 
-			if (bodyObject) {
-				newConfig.body = JSON.stringify(bodyObject);
-				newConfig.headers = {
-					'Content-Type': 'application/json',
-				};
-			}
-
-			return Fwrp.create(urlInstance, mergeConfigs(newConfig, defaultConfigs));
-		};
-	}
+	fwrp.delete = <T>(
+		url: string,
+		configs?: InitConfigs,
+	): FwprPromiseResponse<T> =>
+		fwrp.fetch({ ...configs, method: 'DELETE', url });
 
 	return fwrp;
 };

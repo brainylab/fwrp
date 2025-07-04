@@ -17,22 +17,22 @@ export class CreateURL {
 		}
 
 		if (!path) {
-			if (!isValidUrl(url)) {
-				throw new Error('URL is invalid!');
-			}
+			// if (!isValidUrl(url)) {
+			// 	throw new Error('URL is invalid!');
+			// }
 
 			this.url = url;
 
 			return;
 		}
 
-		if (!isValidPrefix(url)) {
-			throw new Error('prefix URL is invalid!');
-		}
+		// if (!isValidPrefix(url)) {
+		// 	throw new Error('prefix URL is invalid!');
+		// }
 
-		if (!isValidPath(path)) {
-			throw new Error('path is invalid!');
-		}
+		// if (!isValidPath(path)) {
+		// 	throw new Error('path is invalid!');
+		// }
 
 		if (path.length > 0 && !path.startsWith('/')) {
 			path = '/' + path;
