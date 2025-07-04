@@ -73,17 +73,17 @@ export class Fwrp {
 		const fwrp = new Fwrp(url.toString(), configs);
 
 		const handler = async (): Promise<Response> => {
-			// await Promise.resolve();
 			const response = await fwrp._fetch();
 
-			if (!response.ok) {
+			if (!response.ok && fwrp._configs.throwHttpError) {
+				const _cloneResponse = response.clone();
+				const error = new HttpRequestError(_cloneResponse, fwrp.request);
+
 				if (configs.hooks?.beforeError) {
-					await configs.hooks.beforeError(response);
+					await configs.hooks.beforeError(error);
 				}
 
-				if (fwrp._configs.throwHttpError) {
-					throw new HttpRequestError(response, fwrp.request);
-				}
+				throw new HttpRequestError(response, fwrp.request);
 			}
 
 			return response;

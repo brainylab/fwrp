@@ -1,3 +1,4 @@
+import type { HttpRequestError } from '../errors/http-request-error';
 import type { ObjectToUrl } from '../utils/object-to-url-params';
 
 export type FwrpResponse<T = unknown> = {
@@ -12,7 +13,7 @@ export type FwprPromiseResponse<T = unknown> = {
 
 export type FwrpHooks = {
 	beforeRequest?: (request: Request) => Promise<void>;
-	beforeError?: (response: FwrpResponse) => Promise<void>;
+	beforeError?: (error: HttpRequestError) => Promise<void>;
 };
 
 export type FwrpHeadersInit =
