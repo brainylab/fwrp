@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.5.0
+
+### Minor Changes
+
+- [`cf47d64`](https://github.com/brainylab/fwrp/commit/cf47d64c7ec27d823e61e8390bf800158998e416) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - refactor: simplify instance creation and improve error handling
+
 ## 1.4.2
 
 ### Patch Changes
