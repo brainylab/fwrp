@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.5.1
+
+### Patch Changes
+
+- [`91470c5`](https://github.com/brainylab/fwrp/commit/91470c500c99356165b83dfe04581f62decc5ddd) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - refactor: update error handling in Fwrp class and hooks
+
 ## 1.5.0
 
 ### Minor Changes
