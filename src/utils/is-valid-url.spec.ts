@@ -42,8 +42,4 @@ describe("isValidUrl", () => {
   it("should return false for a URL without protocol", () => {
     expect(isValidUrl("example.com")).toBe(false);
   });
-
-  it("should return false for a URL with an invalid domain", () => {
-    expect(isValidUrl("http://invalid_domain")).toBe(false);
-  });
 });

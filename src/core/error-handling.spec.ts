@@ -10,6 +10,7 @@ describe("error-handling", () => {
           status: 404,
           statusText: "Not Found",
           json: () => Promise.resolve({ message: "Not Found" }),
+          text: () => Promise.resolve("Not Found"),
         } as Response,
         {} as Request,
       ),

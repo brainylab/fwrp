@@ -1,9 +1,4 @@
-import type {
-  FwprPromiseResponse,
-  FwrpConfigs,
-  TransformFn,
-} from "../types/fwrp";
-import type { Merge } from "../utils/types";
+import type { FwprPromiseResponse, FwrpConfigs } from "../types/fwrp";
 
 import { CreateURL } from "../utils/create-url";
 import { mergeConfigs } from "../utils/merge-configs";
@@ -16,42 +11,32 @@ export type RequestInitConfigs = InitConfigs & {
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
 };
 
-type ConfigsWithTransform<T, R> = Omit<InitConfigs, "transform"> & {
-  transform?: TransformFn<T, R>;
-};
-
 export type FwrpInstance = {
-  get: <T = any, R = unknown>(
-    url: string,
-    configs?: ConfigsWithTransform<T, R>,
-  ) => FwprPromiseResponse<Merge<T, R>>;
+  get: <T = any>(url: string, configs?: InitConfigs) => FwprPromiseResponse<T>;
 
-  post: <B = unknown, T = any, R = unknown>(
+  post: <B = unknown, T = any>(
     url: string,
     body?: B,
-    configs?: ConfigsWithTransform<T, R>,
-  ) => FwprPromiseResponse<Merge<T, R>>;
+    configs?: InitConfigs,
+  ) => FwprPromiseResponse<T>;
 
-  put: <B = unknown, T = any, R = unknown>(
+  put: <B = unknown, T = any>(
     url: string,
     body?: B,
-    configs?: ConfigsWithTransform<T, R>,
-  ) => FwprPromiseResponse<Merge<T, R>>;
+    configs?: InitConfigs,
+  ) => FwprPromiseResponse<T>;
 
-  delete: <T = any, R = unknown>(
+  delete: <T = any>(
     url: string,
-    configs?: ConfigsWithTransform<T, R>,
-  ) => FwprPromiseResponse<Merge<T, R>>;
+    configs?: InitConfigs,
+  ) => FwprPromiseResponse<T>;
 
-  patch: <T = any, R = unknown>(
+  patch: <T = any>(
     url: string,
-    configs?: ConfigsWithTransform<T, R>,
-  ) => FwprPromiseResponse<Merge<T, R>>;
+    configs?: InitConfigs,
+  ) => FwprPromiseResponse<T>;
 
-  head: <T = any, R = unknown>(
-    url: string,
-    configs?: ConfigsWithTransform<T, R>,
-  ) => FwprPromiseResponse<Merge<T, R>>;
+  head: <T = any>(url: string, configs?: InitConfigs) => FwprPromiseResponse<T>;
 
   fetch: <T = unknown>(configs: RequestInitConfigs) => FwprPromiseResponse<T>;
 };

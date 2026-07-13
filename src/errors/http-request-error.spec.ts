@@ -6,6 +6,7 @@ describe("http-request-error", () => {
       status: 404,
       statusText: "Not Found",
       json: () => Promise.resolve({ message: "Not Found" }),
+      text: () => Promise.resolve("Not Found"),
     } as Response;
 
     const errorInstance = new HttpRequestError(mockResponse, {} as Request);
@@ -18,6 +19,7 @@ describe("http-request-error", () => {
     const mockResponse = {
       status: 404,
       json: () => Promise.resolve({ message: "Not Found" }),
+      text: () => Promise.resolve("Not Found"),
     } as Response;
 
     const errorInstance = new HttpRequestError(mockResponse, {} as Request);

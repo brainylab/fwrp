@@ -33,5 +33,5 @@ export function objectToUrlParams(obj: ObjectToUrl): string {
     }
   });
 
-  return decodeURI(params.toString());
+  return params.toString();
 }

@@ -18,6 +18,11 @@ type InternalOptions = {
     | Record<string, string | undefined>;
 } & Omit<FwrpConfigs, "headers">;
 
+type InternalTransform = (
+  data: any,
+  response: Response,
+) => unknown | Promise<unknown>;
+
 export class Fwrp {
   public request: Request;
   public hooks: FwrpHooks = {
@@ -25,6 +30,8 @@ export class Fwrp {
     beforeError: undefined,
     afterResponse: undefined,
   };
+
+  public transforms: InternalTransform[] = [];
 
   private _configs: InternalOptions;
 
@@ -124,10 +131,14 @@ export class Fwrp {
             return "";
           }
 
-          const data = await response.json();
+          let data = await response.json();
 
-          if (fwrp._configs.transform) {
-            const transformed = await fwrp._configs.transform(data, response);
+          for (const transform of fwrp.transforms) {
+            const transformed = await transform(data, response);
+
+            if (transformed === undefined) {
+              continue;
+            }
 
             if (
               data &&
@@ -135,10 +146,10 @@ export class Fwrp {
               transformed &&
               typeof transformed === "object"
             ) {
-              return { ...data, ...transformed };
+              data = { ...data, ...transformed };
+            } else {
+              data = transformed;
             }
-
-            return transformed;
           }
 
           return data;
@@ -147,6 +158,11 @@ export class Fwrp {
         return response[type]();
       };
     }
+
+    result.transform = ((fn: InternalTransform) => {
+      fwrp.transforms.push(fn);
+      return result;
+    }) as FwprPromiseResponse<unknown>["transform"];
 
     return result;
   }

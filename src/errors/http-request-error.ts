@@ -18,7 +18,7 @@ export class HttpRequestError extends Error {
     this.code = response.status;
 
     this.json = response.json.bind(response);
-    this.text = response.json.bind(response);
+    this.text = response.text.bind(response);
 
     this.response = response;
     this.request = request;
