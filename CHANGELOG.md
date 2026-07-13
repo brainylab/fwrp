@@ -1,5 +1,13 @@
 # @brainylab/fwrp
 
+## 2.0.1
+
+### Patch Changes
+
+- [`f8dec20`](https://github.com/brainylab/fwrp/commit/f8dec20de7c15360e60c71c2bd08444c5c84dfa3) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - fix ci
+
+- [`ab982a5`](https://github.com/brainylab/fwrp/commit/ab982a580c6a0b8bee6b94f8af932bdad509a746) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - refactor: fix performance and security
+
 ## 2.0.0
 
 ### Major Changes
