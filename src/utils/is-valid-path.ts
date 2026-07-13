@@ -1,11 +1,5 @@
-export function isValidPath(url: string): boolean {
-  const pathPattern = new RegExp(
-    "^" +
-      "(\\/)?" +
-      "([a-zA-Z\\d_.-]+\\/)*" +
-      "([a-zA-Z\\d_.-]+)?" +
-      "(\\?[^#]*)?$",
-  );
+const PATH_PATTERN = /^(\/)?([a-zA-Z\d_.-]+\/)*([a-zA-Z\d_.-]+)?(\?[^#]*)?$/;
 
-  return !!pathPattern.test(url);
+export function isValidPath(url: string): boolean {
+  return PATH_PATTERN.test(url);
 }

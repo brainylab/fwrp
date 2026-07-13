@@ -55,13 +55,9 @@ export class CreateURL {
   }
 
   public toString() {
-    if (this.params) {
-      const params = objectToUrlParams(this.params);
-
-      this.url = `${this.url}?${params}`;
-    }
-
-    return this.url;
+    if (!this.params) return this.url;
+    const params = objectToUrlParams(this.params);
+    return params ? `${this.url}?${params}` : this.url;
   }
 
   static create(url: string, path?: string) {

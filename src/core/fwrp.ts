@@ -74,12 +74,16 @@ export class Fwrp {
       url.addParams(configs.params);
     }
 
-    if (typeof configs.body === "object") {
+    const isPlainObject =
+      configs.body != null &&
+      typeof configs.body === "object" &&
+      (configs.body.constructor === Object ||
+        configs.body.constructor === undefined);
+
+    if (isPlainObject) {
       configs.body = JSON.stringify(configs.body);
       configs.headers = mergeConfigs(
-        {
-          "Content-Type": "application/json",
-        },
+        { "Content-Type": "application/json" },
         configs.headers,
       ) as Record<string, string>;
     }
@@ -90,14 +94,11 @@ export class Fwrp {
       const response = await fwrp._fetch();
 
       if (!response.ok && fwrp._configs.throwHttpError) {
-        const _cloneResponse = response.clone();
-        const error = new HttpRequestError(_cloneResponse, fwrp.request);
-
+        const error = new HttpRequestError(response, fwrp.request);
         if (configs.hooks?.beforeError) {
           await configs.hooks.beforeError(error);
         }
-
-        throw new HttpRequestError(response, fwrp.request);
+        throw error;
       }
 
       return response;
@@ -125,13 +126,9 @@ export class Fwrp {
             return "";
           }
 
-          const arrayBuffer = await response.clone().arrayBuffer();
-          const responseSize = arrayBuffer.byteLength;
-          if (responseSize === 0) {
-            return "";
-          }
-
-          let data = await response.json();
+          const text = await response.text();
+          if (text.length === 0) return "";
+          let data = JSON.parse(text);
 
           for (const transform of fwrp.transforms) {
             const transformed = await transform(data, response);

@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noConfusingVoidType: <no error> */
 export type ObjectEntries<T> =
   T extends ArrayLike<infer U>
     ? Array<[string, U]>

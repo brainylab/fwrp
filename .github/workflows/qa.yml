@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: install packages
         uses: ./.github/common-actions/install
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: install packages
         uses: ./.github/common-actions/install

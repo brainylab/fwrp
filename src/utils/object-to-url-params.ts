@@ -3,35 +3,16 @@ export type ObjectToUrl = Record<
   string | number | string[] | number[] | boolean | undefined | null
 >;
 
-function cleanObject(obj: ObjectToUrl): ObjectToUrl {
-  const cleanedObj: ObjectToUrl = {};
-  Object.keys(obj).forEach((key) => {
-    const value = obj[key];
-    if (value !== undefined && value !== null) {
-      cleanedObj[key] = value;
-    }
-  });
-
-  return cleanedObj;
-}
-
 export function objectToUrlParams(obj: ObjectToUrl): string {
-  const cleanedObj = cleanObject(obj);
   const params = new URLSearchParams();
-
-  Object.keys(cleanedObj).forEach((key) => {
-    if (Object.hasOwn(obj, key)) {
-      if (Array.isArray(obj[key])) {
-        const arr = obj[key] as string[] | number[];
-
-        arr.forEach((value) => {
-          params.append(`${key}`, String(value));
-        });
-      } else {
-        params.append(key, String(obj[key]));
-      }
+  for (const key of Object.keys(obj)) {
+    const value = obj[key];
+    if (value === undefined || value === null) continue;
+    if (Array.isArray(value)) {
+      for (const v of value) params.append(key, String(v));
+    } else {
+      params.append(key, String(value));
     }
-  });
-
+  }
   return params.toString();
 }
