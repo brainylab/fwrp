@@ -1,127 +1,153 @@
-import { mergeConfigs } from '../utils/merge-configs';
-import { HttpRequestError } from '../errors/http-request-error';
-
-import { responseTypes } from './constants';
-
-import type { CreateURL } from '../utils/create-url';
 import type {
-	FwprPromiseResponse,
-	FwrpConfigs,
-	FwrpHooks,
-} from '../types/fwrp';
-import type { ObjectEntries } from '../utils/types';
+  FwprPromiseResponse,
+  FwrpConfigs,
+  FwrpHooks,
+} from "../types/fwrp";
+import type { CreateURL } from "../utils/create-url";
+import type { ObjectEntries } from "../utils/types";
+
+import { HttpRequestError } from "../errors/http-request-error";
+import { mergeConfigs } from "../utils/merge-configs";
+import { responseTypes } from "./constants";
 
 type InternalOptions = {
-	json?: unknown;
-	fetch: typeof globalThis.fetch;
-	headers:
-		| NonNullable<RequestInit['headers']>
-		| Record<string, string | undefined>;
-} & Omit<FwrpConfigs, 'headers'>;
+  json?: unknown;
+  fetch: typeof globalThis.fetch;
+  headers:
+    | NonNullable<RequestInit["headers"]>
+    | Record<string, string | undefined>;
+} & Omit<FwrpConfigs, "headers">;
 
 export class Fwrp {
-	public request: Request;
-	public hooks: FwrpHooks = {
-		beforeRequest: undefined,
-		beforeError: undefined,
-	};
+  public request: Request;
+  public hooks: FwrpHooks = {
+    beforeRequest: undefined,
+    beforeError: undefined,
+    afterResponse: undefined,
+  };
 
-	private _configs: InternalOptions;
+  private _configs: InternalOptions;
 
-	constructor(url: string, configs: FwrpConfigs) {
-		this._configs = {
-			...configs,
-			throwHttpError: configs?.throwHttpError ?? true,
-			fetch: globalThis.fetch.bind(globalThis),
-		} as InternalOptions;
+  constructor(url: string, configs: FwrpConfigs) {
+    this._configs = {
+      ...configs,
+      throwHttpError: configs?.throwHttpError ?? true,
+      fetch: globalThis.fetch.bind(globalThis),
+    } as InternalOptions;
 
-		if (configs?.hooks) {
-			this.hooks = configs.hooks;
-		}
+    if (configs?.hooks) {
+      this.hooks = configs.hooks;
+    }
 
-		this.request = new globalThis.Request(url, this._configs as RequestInit);
-	}
+    this.request = new globalThis.Request(url, this._configs as RequestInit);
+  }
 
-	protected async _fetch(): Promise<Response> {
-		/**
-		 * implement before hook
-		 */
-		if (this.hooks?.beforeRequest) {
-			await this.hooks.beforeRequest(this.request);
-		}
+  protected async _fetch(): Promise<Response> {
+    /**
+     * implement befor request hook
+     */
+    if (this.hooks?.beforeRequest) {
+      await this.hooks.beforeRequest(this.request);
+    }
 
-		const fetch = await this._configs.fetch(this.request);
+    const fetch = await this._configs.fetch(this.request);
 
-		return fetch;
-	}
+    /**
+     * implement after response hook
+     */
+    if (this.hooks?.afterResponse) {
+      await this.hooks.afterResponse(fetch);
+    }
 
-	static create(url: CreateURL, configs: FwrpConfigs) {
-		if (configs?.params) {
-			url.addParams(configs.params);
-		}
+    return fetch;
+  }
 
-		if (typeof configs.body === 'object') {
-			configs.body = JSON.stringify(configs.body);
-			configs.headers = mergeConfigs(
-				{
-					'Content-Type': 'application/json',
-				},
-				configs.headers,
-			) as Record<string, string>;
-		}
+  static create(url: CreateURL, configs: FwrpConfigs) {
+    if (configs?.params) {
+      url.addParams(configs.params);
+    }
 
-		const fwrp = new Fwrp(url.toString(), configs);
+    if (typeof configs.body === "object") {
+      configs.body = JSON.stringify(configs.body);
+      configs.headers = mergeConfigs(
+        {
+          "Content-Type": "application/json",
+        },
+        configs.headers,
+      ) as Record<string, string>;
+    }
 
-		const handler = async (): Promise<Response> => {
-			const response = await fwrp._fetch();
+    const fwrp = new Fwrp(url.toString(), configs);
 
-			if (!response.ok && fwrp._configs.throwHttpError) {
-				const _cloneResponse = response.clone();
-				const error = new HttpRequestError(_cloneResponse, fwrp.request);
+    const handler = async (): Promise<Response> => {
+      const response = await fwrp._fetch();
 
-				if (configs.hooks?.beforeError) {
-					await configs.hooks.beforeError(error);
-				}
+      if (!response.ok && fwrp._configs.throwHttpError) {
+        const _cloneResponse = response.clone();
+        const error = new HttpRequestError(_cloneResponse, fwrp.request);
 
-				throw new HttpRequestError(response, fwrp.request);
-			}
+        if (configs.hooks?.beforeError) {
+          await configs.hooks.beforeError(error);
+        }
 
-			return response;
-		};
+        throw new HttpRequestError(response, fwrp.request);
+      }
 
-		const result = handler() as FwprPromiseResponse<unknown>;
+      return response;
+    };
 
-		for (const [type, mimeType] of Object.entries(
-			responseTypes,
-		) as ObjectEntries<typeof responseTypes>) {
-			result[type] = async () => {
-				if (type === 'request') {
-					return fwrp.request;
-				}
+    const result = handler() as FwprPromiseResponse<unknown>;
 
-				fwrp.request.headers.set(
-					'accept',
-					fwrp.request.headers.get('accept') || mimeType,
-				);
+    for (const [type, mimeType] of Object.entries(
+      responseTypes,
+    ) as ObjectEntries<typeof responseTypes>) {
+      result[type] = async (): Promise<any> => {
+        if (type === "request") {
+          return fwrp.request;
+        }
 
-				const response = await result;
+        fwrp.request.headers.set(
+          "accept",
+          fwrp.request.headers.get("accept") || mimeType,
+        );
 
-				if (type === 'json') {
-					if (response.status === 204) {
-						return '';
-					}
+        const response = await result;
 
-					const arrayBuffer = await response.clone().arrayBuffer();
-					const responseSize = arrayBuffer.byteLength;
-					if (responseSize === 0) {
-						return '';
-					}
-				}
+        if (type === "json") {
+          if (response.status === 204) {
+            return "";
+          }
 
-				return response[type]();
-			};
-		}
+          const arrayBuffer = await response.clone().arrayBuffer();
+          const responseSize = arrayBuffer.byteLength;
+          if (responseSize === 0) {
+            return "";
+          }
 
-		return result;
-	}
+          const data = await response.json();
+
+          if (fwrp._configs.transform) {
+            const transformed = await fwrp._configs.transform(data, response);
+
+            if (
+              data &&
+              typeof data === "object" &&
+              transformed &&
+              typeof transformed === "object"
+            ) {
+              return { ...data, ...transformed };
+            }
+
+            return transformed;
+          }
+
+          return data;
+        }
+
+        return response[type]();
+      };
+    }
+
+    return result;
+  }
 }

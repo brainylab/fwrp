@@ -1,10 +1,9 @@
-import { createInstance, type FwrpInstance } from './core/create-instance';
+import type { InitConfigs } from "./core/create-instance";
+import { createInstance, type FwrpInstance } from "./core/create-instance";
 import {
-	fwrpErrorHandling,
 	type ErrorHandlingResponse,
-} from './core/error-handling';
-
-import type { InitConfigs } from './core/create-instance';
+	fwrpErrorHandling,
+} from "./core/error-handling";
 
 const fwrp = createInstance() as FwrpInstance & {
 	create: (url?: string, configs?: InitConfigs) => FwrpInstance;
@@ -15,16 +14,15 @@ fwrp.create = createInstance;
 fwrp.errorHandling = fwrpErrorHandling;
 
 /**
- * export lib
- */
-export * from './errors/http-request-error';
-export * from './core/error-handling';
-
-/**
  * export types
  */
-export type { FwrpInstance } from './core/create-instance';
-export type * from './types/fwrp';
-export type * from './types';
+export type { FwrpInstance } from "./core/create-instance";
+export * from "./core/error-handling";
+/**
+ * export lib
+ */
+export * from "./errors/http-request-error";
+export type * from "./types";
+export type * from "./types/fwrp";
 
 export { fwrp, fwrp as default };
