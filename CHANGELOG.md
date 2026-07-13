@@ -1,5 +1,12 @@
 # @brainylab/fwrp
 
+## 1.6.0
+
+### Minor Changes
+
+- [`15e0b3c`](https://github.com/brainylab/fwrp/commit/15e0b3ce7189c4cd37ea76bef8112352c3cf11f5) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - - adicioando novo hook - afterResponse
+  - adicionado novo parametro e fução para transformação dos dados antes de retornar os dados
+
 ## 1.5.1
 
 ### Patch Changes
