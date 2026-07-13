@@ -1,21 +1,26 @@
 {
+  "$schema": "https://www.schemastore.org/tsconfig",
+  "_version": "24.0.0",
+
   "compilerOptions": {
-    "allowJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2024"],
-    "module": "nodenext",
-    "target": "ES2024",
-    "noEmit": false,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
+    "lib": [
+      "es2024",
+      "DOM",
+      "DOM.Iterable",
+      "ESNext.Array",
+      "ESNext.Collection",
+      "ESNext.Error",
+      "ESNext.Iterator",
+      "ESNext.Promise"
+    ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "target": "es2024",
+
     "strict": true,
-    "types": ["vitest/globals"]
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["node", "vitest/globals"]
   },
   "include": ["./src"],
   "exclude": ["node_modules", "coverage"]
