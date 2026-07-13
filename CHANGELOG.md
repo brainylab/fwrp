@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.6.1
+
+### Patch Changes
+
+- [`a765ec0`](https://github.com/brainylab/fwrp/commit/a765ec0e7046289c78d8e41977a2b1e5d226162b) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - format all files with biome
+
 ## 1.6.0
 
 ### Minor Changes
