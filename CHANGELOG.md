@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 1.7.0
+
+### Minor Changes
+
+- [`c50f2de`](https://github.com/brainylab/fwrp/commit/c50f2de792f947a9524a15d51537396e8b5c40df) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - only ESM in project
+
 ## 1.6.1
 
 ### Patch Changes
