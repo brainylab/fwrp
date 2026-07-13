@@ -1,6 +1,7 @@
 {
   "name": "@brainylab/fwrp",
   "version": "1.6.1",
+  "type": "module",
   "keywords": [
     "fetch",
     "wrapper",
@@ -17,9 +18,9 @@
     "name": "André Felipe Schulle",
     "email": "dev@brainylab.com.br"
   },
-  "main": "./index.js",
+  "main": "./index.mjs",
   "module": "./index.mjs",
-  "types": "./index.d.ts",
+  "types": "./index.d.mts",
   "files": [
     "dist",
     "LICENSE"
