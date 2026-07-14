@@ -2,6 +2,7 @@ import type {
   FwprPromiseResponse,
   FwrpConfigs,
   FwrpHooks,
+  FwrpResponse,
 } from "../types/fwrp";
 import type { CreateURL } from "../utils/create-url";
 import type { ObjectEntries } from "../utils/types";
@@ -90,18 +91,72 @@ export class Fwrp {
 
     const fwrp = new Fwrp(url.toString(), configs);
 
-    const handler = async (): Promise<Response> => {
+    /**
+     * parse the response as json applying the registered transforms.
+     * shared between the lazy wrapper and the resolved response.
+     */
+    const parseJson = async (response: Response): Promise<unknown> => {
+      if (response.status === 204) {
+        return "";
+      }
+
+      const text = await response.clone().text();
+      if (text.length === 0) {
+        return "";
+      }
+
+      let data = JSON.parse(text);
+
+      for (const transform of fwrp.transforms) {
+        const transformed = await transform(data, response);
+
+        if (transformed === undefined) {
+          continue;
+        }
+
+        if (
+          data &&
+          typeof data === "object" &&
+          transformed &&
+          typeof transformed === "object"
+        ) {
+          data = { ...data, ...transformed };
+        } else {
+          data = transformed;
+        }
+      }
+
+      return data;
+    };
+
+    const handler = async (): Promise<FwrpResponse<unknown>> => {
       const response = await fwrp._fetch();
 
       if (!response.ok && fwrp._configs.throwHttpError) {
         const error = new HttpRequestError(response, fwrp.request);
+
         if (configs.hooks?.beforeError) {
           await configs.hooks.beforeError(error);
         }
+
         throw error;
       }
 
-      return response;
+      /**
+       * augment the resolved response so it also exposes `transform`
+       * and a json parser that applies the transforms.
+       */
+      const augmented = response as unknown as FwrpResponse<unknown>;
+
+      augmented.json = (() =>
+        parseJson(response)) as FwrpResponse<unknown>["json"];
+
+      augmented.transform = ((fn: InternalTransform) => {
+        fwrp.transforms.push(fn);
+        return augmented;
+      }) as FwrpResponse<unknown>["transform"];
+
+      return augmented;
     };
 
     const result = handler() as FwprPromiseResponse<unknown>;
@@ -122,34 +177,7 @@ export class Fwrp {
         const response = await result;
 
         if (type === "json") {
-          if (response.status === 204) {
-            return "";
-          }
-
-          const text = await response.text();
-          if (text.length === 0) return "";
-          let data = JSON.parse(text);
-
-          for (const transform of fwrp.transforms) {
-            const transformed = await transform(data, response);
-
-            if (transformed === undefined) {
-              continue;
-            }
-
-            if (
-              data &&
-              typeof data === "object" &&
-              transformed &&
-              typeof transformed === "object"
-            ) {
-              data = { ...data, ...transformed };
-            } else {
-              data = transformed;
-            }
-          }
-
-          return data;
+          return parseJson(response);
         }
 
         return response[type]();

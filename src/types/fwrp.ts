@@ -4,6 +4,9 @@ import type { TransformMerge } from "../utils/types";
 
 export type FwrpResponse<T = unknown> = {
   json: <J = T>() => Promise<J>;
+  transform: <R>(
+    fn: (data: T, response: Response) => R | Promise<R>,
+  ) => FwrpResponse<TransformMerge<T, R>>;
 } & Response;
 
 export type FwprPromiseResponse<T = unknown> = {
