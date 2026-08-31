@@ -1,4 +1,5 @@
 import { HttpRequestError } from "../errors/http-request-error";
+import { ParseError } from "../errors/parse-error";
 import { CreateURL } from "../utils/create-url";
 import { Fwrp } from "./fwrp";
 
@@ -301,12 +302,17 @@ describe("Fwrp", () => {
       const response = Fwrp.create(CreateURL.create(BASE_URL), {
         method: "GET",
       }).transform((data: any) => ({
-        cep: Number(data.cep),
+        ...data,
+        cep_formatted: Number(data.cep),
       }));
 
-      const data = await response.json<{ cep: number; state: string }>();
+      const data = await response.json<{
+        cep: number;
+        cep_formatted: number;
+        state: string;
+      }>();
 
-      expect(data.cep).toBe(89010025);
+      expect(data.cep_formatted).toBe(89010025);
       expect(data.state).toBe("SC");
     });
 
@@ -329,7 +335,9 @@ describe("Fwrp", () => {
 
       const response = Fwrp.create(CreateURL.create(BASE_URL), {
         method: "GET",
-      }).transform((data) => JSON.stringify(data));
+      });
+
+      response.transform((data) => JSON.stringify(data));
 
       const data = await response.json<string>();
 
@@ -414,6 +422,86 @@ describe("Fwrp", () => {
       const data = await response.json();
 
       expect(data).toEqual({ cep: "89010025" });
+    });
+  });
+
+  describe("JSON parsing failures", () => {
+    it("should throw ParseError when the body is HTML (non-json content-type)", async () => {
+      mockFetch(
+        new Response("<html><h1>502 Bad Gateway</h1></html>", {
+          status: 200,
+          headers: { "content-type": "text/html" },
+        }),
+      );
+
+      const response = Fwrp.create(CreateURL.create(BASE_URL), {
+        method: "GET",
+      });
+
+      await expect(response.json()).rejects.toBeInstanceOf(ParseError);
+    });
+
+    it("should throw ParseError when the content-type is json but the body is not valid json", async () => {
+      mockFetch(
+        new Response("<html>not json</html>", {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        }),
+      );
+
+      const response = Fwrp.create(CreateURL.create(BASE_URL), {
+        method: "GET",
+      });
+
+      await expect(response.json()).rejects.toBeInstanceOf(ParseError);
+    });
+
+    it("should preserve the raw body and content-type in the ParseError", async () => {
+      const rawBody = "<html><h1>502 Bad Gateway</h1></html>";
+      mockFetch(
+        new Response(rawBody, {
+          status: 200,
+          headers: { "content-type": "text/html" },
+        }),
+      );
+
+      const response = Fwrp.create(CreateURL.create(BASE_URL), {
+        method: "GET",
+      });
+
+      await expect(response.json()).rejects.toMatchObject({
+        name: "ParseError",
+        rawBody,
+        contentType: "text/html",
+      });
+    });
+
+    it("should keep the original SyntaxError as cause", async () => {
+      mockFetch(
+        new Response("<not-json>", {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        }),
+      );
+
+      const response = Fwrp.create(CreateURL.create(BASE_URL), {
+        method: "GET",
+      });
+
+      await response.json().catch((error) => {
+        expect(error).toBeInstanceOf(ParseError);
+        expect(error.cause).toBeInstanceOf(SyntaxError);
+      });
+    });
+
+    it("should still parse valid json without throwing", async () => {
+      mockFetch(jsonResponse({ ok: true }));
+
+      const response = Fwrp.create(CreateURL.create(BASE_URL), {
+        method: "GET",
+      });
+
+      await expect(response.json()).resolves.toEqual({ ok: true });
     });
   });
 });

@@ -26,4 +26,5 @@ export * from "./core/error-handling";
  * export lib
  */
 export * from "./errors/http-request-error";
+export * from "./errors/parse-error";
 export { fwrp, fwrp as default };

@@ -8,6 +8,7 @@ import type { CreateURL } from "../utils/create-url";
 import type { ObjectEntries } from "../utils/types";
 
 import { HttpRequestError } from "../errors/http-request-error";
+import { ParseError } from "../errors/parse-error";
 import { mergeConfigs } from "../utils/merge-configs";
 import { responseTypes } from "./constants";
 
@@ -105,7 +106,24 @@ export class Fwrp {
         return "";
       }
 
-      let data = JSON.parse(text);
+      // Opcional, mas recomendado: valida o Content-Type antes de tentar o parse.
+      const contentType = response.headers.get("content-type") ?? "";
+      if (contentType && !contentType.includes("json")) {
+        throw new ParseError(
+          new SyntaxError("response is not JSON"),
+          text,
+          response,
+          fwrp.request,
+        );
+      }
+
+      let data: unknown;
+      try {
+        data = JSON.parse(text);
+      } catch (error) {
+        // aqui capturamos o "Unexpected token '<'"
+        throw new ParseError(error, text, response, fwrp.request);
+      }
 
       for (const transform of fwrp.transforms) {
         const transformed = await transform(data, response);
