@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 2.0.2
+
+### Patch Changes
+
+- [`c83007a`](https://github.com/brainylab/fwrp/commit/c83007a373d3c6f9ae356c3bd753d03e146bb8ab) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - add support do transform in line
+
 ## 2.0.1
 
 ### Patch Changes
