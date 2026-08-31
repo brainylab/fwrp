@@ -1,5 +1,11 @@
 # @brainylab/fwrp
 
+## 2.0.3
+
+### Patch Changes
+
+- [`5e6e0a8`](https://github.com/brainylab/fwrp/commit/5e6e0a8d450e4c46e42edb8df08a1b4ce349a278) Thanks [@andrefelipeschulle](https://github.com/andrefelipeschulle)! - Add ParseError handling for invalid JSON responses
+
 ## 2.0.2
 
 ### Patch Changes
